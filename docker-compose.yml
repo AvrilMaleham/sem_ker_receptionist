@@ -1,0 +1,70 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: chatbotdb
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  dbmate:
+    image: amacneil/dbmate
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/chatbotdb?sslmode=disable
+    volumes:
+      - ./db/migrations:/db/migrations
+    command: up
+
+  vectorstore:
+    image: busybox
+    volumes:
+      - ./vectorstore:/vectorstore
+    command: ["sh", "-c", "mkdir -p /vectorstore && sleep infinity"]
+
+  build_vectorstore:
+    build: ./build_vectorstore
+    depends_on:
+      - vectorstore
+    volumes:
+      - ./vectorstore:/app/vectorstore
+    env_file:
+      - .env
+
+  api:
+    build: ./api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - build_vectorstore
+      - dbmate
+    volumes:
+      - ./vectorstore:/app/vectorstore
+    env_file:
+      - .env
+    entrypoint: >
+      sh -c "
+        echo 'Waiting for vectorstore to be ready...';
+        while [ ! -f /app/vectorstore/.ready ]; do
+          sleep 1;
+        done;
+        echo 'Vectorstore ready. Starting API...';
+        uvicorn main:app --host 0.0.0.0 --port 8000
+      "
+
+  ui:
+    build: ./ui
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api

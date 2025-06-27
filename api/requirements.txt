@@ -1,0 +1,11 @@
+langchain
+langchain-openai
+langchain-community
+faiss-cpu
+fastapi
+pydantic
+python-dotenv
+uvicorn[standard]
+psycopg2-binary
+
+
