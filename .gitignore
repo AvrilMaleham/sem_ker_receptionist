@@ -1,0 +1,67 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.env
+
+# Ignore all .env files
+.env*
+
+# But do NOT ignore .env-example
+!.env-example
+
+# macOS system files
+.DS_Store
+
+# VS Code settings 
+.vscode/
+
+# Pytest cache
+.pytest_cache/
+
+# MyPy cache
+.mypy_cache/
+
+# Streamlit's file-based cache
+.streamlit/*.toml
+.streamlit/config.toml
+.streamlit/credentials.toml
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Python egg files
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Pipenv or Poetry lock files
+Pipfile.lock
+poetry.lock
+
+# Coverage reports
+htmlcov/
+.coverage
+coverage.xml
+
+# Testing and profiling
+.tox/
+.cache/
+nosetests.xml
+test-results/
+
+# PyCharm
+.idea/
+
+# Vector store
+/vectorstore/
+*.faiss
+*.index
