@@ -1,0 +1,18 @@
+[project]
+name = "myproject"
+version = "0.1.0"
+description = "An agentic receptionist project"
+requires-python = ">=3.12"
+
+dependencies = [
+  "pydantic",
+  "python-dotenv",
+  "uvicorn[standard]",
+  "semantic-kernel[all]",
+  "pydantic-extra-types",
+  "asyncpg",
+]
+
+[build-system]
+requires = ["uv"]
+build-backend = "uv.build"
