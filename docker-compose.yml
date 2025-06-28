@@ -26,18 +26,14 @@ services:
       - ./db/migrations:/db/migrations
     command: up
 
-  api:
-    build: ./api
-    ports:
-      - "8000:8000"
-    depends_on:
-      - dbmate
+  local_agent:
+    build: ./local_agent
+    container_name: local_agent
+    restart: on-failure
     env_file:
       - .env
-
-  ui:
-    build: ./ui
-    ports:
-      - "8501:8501"
+    environment:
+      DATABASE_URL: DATABASE_URL=postgres://postgres:postgres@db:5432/receptionistdb?sslmode=disable
     depends_on:
-      - api
+      - db
+    command: ["uv", "run", "python", "main.py"]

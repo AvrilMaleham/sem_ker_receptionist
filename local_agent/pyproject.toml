@@ -11,8 +11,9 @@ dependencies = [
   "semantic-kernel[all]",
   "pydantic-extra-types",
   "asyncpg",
+  "python-dotenv",
+  "openai",
 ]
 
-[build-system]
-requires = ["uv"]
-build-backend = "uv.build"
+
+
