@@ -179,35 +179,6 @@ async def get_last_appointment_by_customer(self, customer_id: str) -> Appointmen
 
     return Appointment(**row) if row else None
 
-@kernel_function(
-    name="CheckScheduleAvailabilty",
-    description="Check which appointments are available."
-)
-async def create_appointment(self, customer_id: str) -> Appointment:
-    conn = await get_connection()
-    row = await conn.fetchrow(
-        """
-        SELECT
-          id,
-          start_datetime,
-          end_datetime,
-          service_details,
-          stylist_id,
-          customer_id,
-          noshow,
-          notes
-        FROM appointment
-        WHERE customer_id = $1
-          AND start_datetime < now()  -- only past appointments
-        ORDER BY start_datetime DESC
-        LIMIT 1;
-        """,
-        customer_id
-    )
-    await conn.close()
-
-    return Appointment(**row) if row else None
-
 @kernel_function(name="CreateAppointment", description="Create a new appointment.")
 async def create_appointment(self, data: AppointmentCreate) -> Appointment:
         conn = await get_connection()
