@@ -51,7 +51,7 @@ class SalonDbPlugin:
         conn = await get_connection()
         row = await conn.fetchrow(
             "INSERT INTO receptionistdb.public.customer (first_name, last_name, address, phone_number, email, card_num)"
-            " VALUES ($1, $2, $3, $4, $5) RETURNING id, first_name, last_name, address, phone_number, email, card_num",
+            " VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, first_name, last_name, address, phone_number, email, card_num",
             data.first_name, data.last_name, data.address, data.phone_number, data.email, data.card_num
         )
         await conn.close()
