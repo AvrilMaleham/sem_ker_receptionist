@@ -1,7 +1,7 @@
 from typing import List, Optional, Tuple
 from datetime import datetime, timedelta
-from pydantic import BaseModel, EmailStr, root_validator
-from pydantic_extra_types import CreditCardNumber
+from pydantic import BaseModel, EmailStr, model_validator
+from pydantic_extra_types.payment import PaymentCardNumber
 
 class QueryRequest(BaseModel):
     query: str
@@ -13,7 +13,7 @@ class Customer(BaseModel):
     address: Optional[str]
     phone_number: Optional[str]
     email: EmailStr
-    card_num: CreditCardNumber
+    card_num: Optional[str]
 
 class CustomerCreate(BaseModel):
     first_name: str
@@ -21,7 +21,7 @@ class CustomerCreate(BaseModel):
     address: Optional[str]
     phone_number: Optional[str]
     email: EmailStr
-    card_num: CreditCardNumber
+    card_num: Optional[str]
 class Staff(BaseModel):
     id: int
     first_name: str
@@ -46,7 +46,7 @@ class ScheduleParams(BaseModel):
     skill_level: Optional[str] = None
     staff_id: Optional[int] = None
     
-    @root_validator
+    @model_validator(mode="after")
     def validate_exclusive_or_none(cls, values):
         skill, staff = values.get("skill_level"), values.get("staff_id")
         if skill is not None and staff is not None:

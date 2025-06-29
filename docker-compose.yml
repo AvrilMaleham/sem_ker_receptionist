@@ -32,8 +32,16 @@ services:
     restart: on-failure
     env_file:
       - .env
+    working_dir: /app
+    stdin_open: true
+    tty: true
     environment:
-      DATABASE_URL: DATABASE_URL=postgres://postgres:postgres@db:5432/receptionistdb?sslmode=disable
+      DATABASE_URL: postgres://postgres:postgres@db:5432/receptionistdb?sslmode=disable
     depends_on:
       - db
-    command: ["uv", "run", "python", "main.py"]
+    command: >
+      sh -c "
+        uv venv &&
+        uv sync &&
+        uv run python main.py
+      "

@@ -6,14 +6,12 @@ requires-python = ">=3.12"
 
 dependencies = [
   "pydantic",
+  "pydantic[email]",
   "python-dotenv",
-  "uvicorn[standard]",
   "semantic-kernel[all]",
   "pydantic-extra-types",
   "asyncpg",
-  "python-dotenv",
-  "openai",
+  "openai"
 ]
-
 
 
